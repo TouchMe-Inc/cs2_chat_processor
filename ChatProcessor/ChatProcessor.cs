@@ -207,7 +207,7 @@ public class ChatProcessor : BasePlugin
 
         foreach (CCSPlayerController recipient in recipients)
         {
-            formatMessage =  withPlace ? Localize(recipient, formatMessage, senderName, message, Localize(recipient, place)) : Localize(recipient, formatMessage, senderName, message);
+            formatMessage = withPlace ? Localize(recipient, formatMessage, senderName, message, Localize(recipient, place)) : Localize(recipient, formatMessage, senderName, message);
 
             recipient.PrintToChat(Tags.ReplaceColorTags(formatMessage, recipient.Team));
             recipient.PrintToConsole(Tags.RemoveColorTags(formatMessage));
