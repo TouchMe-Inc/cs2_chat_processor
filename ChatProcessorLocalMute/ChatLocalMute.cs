@@ -39,6 +39,11 @@ public class ChatLocalMute : BasePlugin
             return;
         }
 
+        OpenPlayerMenu(caller);
+    }
+
+    private void OpenPlayerMenu(CCSPlayerController player)
+    {
         var PlayerMenu = new ChatMenu("Player Menu");
 
         IEnumerable<CCSPlayerController> playerEntities = Utilities.GetPlayers().Where(player => player is
@@ -48,12 +53,12 @@ public class ChatLocalMute : BasePlugin
 
         foreach (var playerEntity in playerEntities)
         {
-            PlayerMenu.AddMenuOption(playerEntity.PlayerName, (_,_) => { Console.WriteLine($"Selected {playerEntity.PlayerName}");});
+            PlayerMenu.AddMenuOption(playerEntity.PlayerName, (_, _) => { Console.WriteLine($"Selected {playerEntity.PlayerName}"); });
         }
 
         PlayerMenu.ExitButton = true;
 
-        PlayerMenu.Open(caller);
+        PlayerMenu.Open(player);
     }
 
     private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref int flags)
