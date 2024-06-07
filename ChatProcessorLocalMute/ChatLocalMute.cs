@@ -6,7 +6,6 @@ using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API;
 using Microsoft.Extensions.Localization;
-using CounterStrikeSharp.API.Modules.Entities;
 
 namespace ChatMute;
 
