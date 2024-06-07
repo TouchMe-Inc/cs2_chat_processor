@@ -6,6 +6,7 @@ using CounterStrikeSharp.API.Core.Capabilities;
 using CounterStrikeSharp.API.Core.Translations;
 using ChatProcessor.API;
 using ChatProcessor.Utils;
+using Microsoft.Extensions.Localization;
 
 namespace ChatProcessor;
 
@@ -25,8 +26,12 @@ public class ChatProcessor : BasePlugin
 
     private ChatProcessorApi ChatProcessorApi = null!;
 
+    internal static IStringLocalizer? Stringlocalizer;
+
     public override void Load(bool hotReload)
     {
+        Stringlocalizer = Localizer;
+
         ChatProcessorApi = new ChatProcessorApi(this);
         Capabilities.RegisterPluginCapability(_pluginCapability, () => ChatProcessorApi);
 
