@@ -43,3 +43,5 @@ private void OnChatMessagePost(CCSPlayerController sender, string name, string m
   // You code here
 }
 ```
+
+Example: [ChatLocalMute](https://github.com/TouchMe-Inc/cs2_chat_processor/blob/main/ChatProcessorLocalMute/ChatLocalMute.cs)
