@@ -54,6 +54,7 @@ public class ChatLocalMute : BasePlugin
 
         IEnumerable<CCSPlayerController> playerEntities = Utilities.GetPlayers().Where(player => player is
         {
+            IsBot: false,
             IsValid: true
         });
 
