@@ -1,4 +1,4 @@
-# About chat_processor
+# About ChatProcessor
 API for chat manipulation.
 
 ## Development
