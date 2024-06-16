@@ -27,16 +27,16 @@ public override void OnAllPluginsLoaded(bool hotReload)
 }
 ```
 
-Add MessagePreCallback:
+Add MessagePreCallback (Allows you to edit nickname, message and recipients):
 ```c#
 private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref int flags)
 {
   // You code here
-  return HookResult...
+  return HookResult.Handled;
 }
 ```
 
-Add MessagePostCallback:
+Add MessagePostCallback (Allows you to see the total values ​​of nickname, message and recipients):
 ```c#
 private void OnChatMessagePost(CCSPlayerController sender, string name, string message, List<CCSPlayerController> recipients, int flags)
 {
