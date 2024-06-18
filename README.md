@@ -1,7 +1,16 @@
 # About ChatProcessor
 API for chat manipulation.
 
-This toolkit allows you to: locally mute the player (done), display team chat for viewers (or admins), block or change player messages, add a signature to the nickname (for example, admin/vip).
+> [!IMPORTANT]
+> The plugin hides original messages and reproduces them via player.PrintToChat, preserving the location tag (for team chat), and also sends a copy of the chat to the console
+
+
+This toolkit allows you to: 
+* locally mute the player (done);
+* display team chat for viewers (or admins);
+* block or change player messages;
+* add a signature to the nickname (for example, admin/vip);
+* etc.
 
 ## Development
 First let's add a field:
