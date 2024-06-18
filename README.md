@@ -1,5 +1,6 @@
 # About ChatProcessor
 API for chat manipulation.
+
 This toolkit allows you to: locally mute the player (done), display team chat for viewers (or admins), block or change player messages, add a signature to the nickname (for example, admin/vip).
 
 ## Development
