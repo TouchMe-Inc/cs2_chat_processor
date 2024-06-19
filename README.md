@@ -32,7 +32,7 @@ public override void OnAllPluginsLoaded(bool hotReload)
 
   // OR/AND
 
-  // Add handler PRE
+  // Add handler POST
   ChatProcessorApi.RegisterHandlerPost(OnChatMessagePost);
   // ...    
 }
