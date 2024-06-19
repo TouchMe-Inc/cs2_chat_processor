@@ -6,9 +6,9 @@ API for chat manipulation.
 
 
 This toolkit allows you to: 
-* locally mute the player (done);
-* display team chat for viewers (or admins);
-* block or change player messages;
+* locally mute the player ([here](https://github.com/TouchMe-Inc/cs2_chat_processor/blob/main/ChatProcessorLocalMute/ChatLocalMute.cs));
+* display team chat for spectators (or admins);
+* hide or change player nickname/messages;
 * add a signature to the nickname (for example, admin/vip);
 * etc.
 
@@ -38,7 +38,7 @@ public override void OnAllPluginsLoaded(bool hotReload)
 }
 ```
 
-Add MessagePreCallback (Allows you to edit nickname, message and recipients):
+Add [MessageCallbackPre](https://github.com/TouchMe-Inc/cs2_chat_processor/blob/5374d14a8eeca2f3e3b52fbe160b887e7784a855/ChatProcessorApi/IChatProcessor.cs#L10) (Allows you to edit nickname, message and recipients):
 ```c#
 private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref int flags)
 {
@@ -47,7 +47,7 @@ private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name,
 }
 ```
 
-Add MessagePostCallback (Allows you to see the total values ​​of nickname, message and recipients):
+Add [MessageCallbackPost](https://github.com/TouchMe-Inc/cs2_chat_processor/blob/5374d14a8eeca2f3e3b52fbe160b887e7784a855/ChatProcessorApi/IChatProcessor.cs#L13) (Allows you to see the total values ​​of nickname, message and recipients):
 ```c#
 private void OnChatMessagePost(CCSPlayerController sender, string name, string message, List<CCSPlayerController> recipients, int flags)
 {
