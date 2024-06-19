@@ -80,7 +80,7 @@ public class ChatProcessor : BasePlugin
                 {
                     string fakeMessage = message.Replace(trigger, _silentChatTriggers.First());
 
-                    // Hack.
+                    // Hack. Required for hidden command execution (say /{cmd} OR say_team /{cmd}).
                     Server.NextFrame(() => Server.NextFrame(() => player.ExecuteClientCommandFromServer($"{command} \"{fakeMessage}\"")));
 
                     break;
@@ -95,7 +95,7 @@ public class ChatProcessor : BasePlugin
                 {
                     string fakeMessage = message.Replace(trigger, string.Empty);
 
-                    // Hack.
+                    // Hack. Required for hidden command execution (console).
                     Server.NextFrame(() => Server.NextFrame(() => player.ExecuteClientCommandFromServer($"css_{fakeMessage}")));
 
                     break;
