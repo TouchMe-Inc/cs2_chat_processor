@@ -1,7 +1,6 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Capabilities;
 using ChatProcessor.API;
-using Microsoft.Extensions.Localization;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Utils;
 
