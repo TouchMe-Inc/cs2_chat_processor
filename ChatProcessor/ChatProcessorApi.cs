@@ -8,30 +8,30 @@ public class ChatProcessorApi : IChatProcessor
 {
     private readonly ChatProcessor _chatProcessor;
 
-    private List<IChatProcessor.MessagePreCallback> _messagePreHandlers = new();
-    private List<IChatProcessor.MessagePostCallback> _messagePostHandlers = new();
+    private List<IChatProcessor.MessageCallbackPre> _messagePreHandlers = new();
+    private List<IChatProcessor.MessageCallbackPost> _messagePostHandlers = new();
 
     public ChatProcessorApi(ChatProcessor chatProcessor)
     {
         _chatProcessor = chatProcessor;
     }
 
-    public void RegisterHandlerPre(IChatProcessor.MessagePreCallback handler)
+    public void RegisterHandlerPre(IChatProcessor.MessageCallbackPre handler)
     {
         _messagePreHandlers.Add(handler);
     }
 
-    public void DeregisterHandlerPre(IChatProcessor.MessagePreCallback handler)
+    public void DeregisterHandlerPre(IChatProcessor.MessageCallbackPre handler)
     {
         _messagePreHandlers.Remove(handler);
     }
 
-    public void RegisterHandlerPost(IChatProcessor.MessagePostCallback handler)
+    public void RegisterHandlerPost(IChatProcessor.MessageCallbackPost handler)
     {
         _messagePostHandlers.Add(handler);
     }
 
-    public void DeregisterHandlerPost(IChatProcessor.MessagePostCallback handler)
+    public void DeregisterHandlerPost(IChatProcessor.MessageCallbackPost handler)
     {
         _messagePostHandlers.Remove(handler);
     }
