@@ -3,7 +3,6 @@ using ChatProcessor.API;
 
 namespace ChatProcessor;
 
-
 public class ChatProcessorApi : IChatProcessor
 {
     private readonly ChatProcessor _chatProcessor;
