@@ -7,7 +7,7 @@ using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API;
 using Microsoft.Extensions.Localization;
 
-namespace ChatMute;
+namespace ChatProcessor;
 
 public class ChatLocalMute : BasePlugin
 {
