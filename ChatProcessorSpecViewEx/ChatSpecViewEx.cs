@@ -18,8 +18,6 @@ public class ChatSpecViewEx : BasePlugin
 
     private IChatProcessor? ChatProcessorApi;
 
-    internal static IStringLocalizer? Stringlocalizer;
-
     public override void OnAllPluginsLoaded(bool hotReload)
     {
         ChatProcessorApi = _pluginCapability.Get();
