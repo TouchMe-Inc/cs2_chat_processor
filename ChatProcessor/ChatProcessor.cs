@@ -156,30 +156,30 @@ public class ChatProcessor : BasePlugin
         string place = sender.PlayerPawn.Value != null ? sender.PlayerPawn.Value.LastPlaceName : string.Empty;
         bool withPlace = false;
 
-        string formatMessage = "Cstrike_Chat_All";
+        string formatMessage = LangKey.CHAT_ALL;
         if ((flags & (int)ChatFlags.Team) != 0)
         {
             switch (sender.Team)
             {
                 case CsTeam.Spectator:
-                    formatMessage = "Cstrike_Chat_Spec";
+                    formatMessage = LangKey.CHAT_SPEC;
                     break;
 
                 case CsTeam.Terrorist:
                     if ((flags & (int)ChatFlags.Dead) != 0)
                     {
-                        formatMessage = "Cstrike_Chat_T_Dead";
+                        formatMessage = LangKey.CHAT_T_DEAD;
                     }
                     else
                     {
                         if (string.IsNullOrEmpty(place))
                         {
-                            formatMessage = "Cstrike_Chat_T";
+                            formatMessage = LangKey.CHAT_T;
                         }
                         else
                         {
                             withPlace = true;
-                            formatMessage = "Cstrike_Chat_T_Loc";
+                            formatMessage = LangKey.CHAT_T;
                         }
                     }
                     break;
@@ -187,18 +187,18 @@ public class ChatProcessor : BasePlugin
                 case CsTeam.CounterTerrorist:
                     if ((flags & (int)ChatFlags.Dead) != 0)
                     {
-                        formatMessage = "Cstrike_Chat_CT_Dead";
+                        formatMessage = LangKey.CHAT_CT_DEAD;
                     }
                     else
                     {
                         if (string.IsNullOrEmpty(place))
                         {
-                            formatMessage = "Cstrike_Chat_CT";
+                            formatMessage = LangKey.CHAT_CT;
                         }
                         else
                         {
                             withPlace = true;
-                            formatMessage = "Cstrike_Chat_CT_Loc";
+                            formatMessage = LangKey.CHAT_CT_LOC;
                         }
                     }
                     break;
@@ -207,7 +207,7 @@ public class ChatProcessor : BasePlugin
 
         else if ((flags & (int)ChatFlags.Dead) != 0 && (sender.Team == CsTeam.Terrorist || sender.Team == CsTeam.CounterTerrorist))
         {
-            formatMessage = "Cstrike_Chat_AllDead";
+            formatMessage = LangKey.CHAT_ALL_DEAD;
         }
 
         foreach (CCSPlayerController recipient in recipients)
