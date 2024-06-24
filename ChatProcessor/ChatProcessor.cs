@@ -153,6 +153,11 @@ public class ChatProcessor : BasePlugin
 
     private void OnPlayerChatPost(CCSPlayerController sender, string senderName, string message, List<CCSPlayerController> recipients, int flags)
     {
+        if (recipients.Count == 0)
+        {
+            return;
+        }
+
         string place = sender.PlayerPawn.Value != null ? sender.PlayerPawn.Value.LastPlaceName : string.Empty;
         bool withPlace = false;
 
