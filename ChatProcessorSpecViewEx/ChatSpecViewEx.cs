@@ -30,14 +30,14 @@ public class ChatSpecViewEx : BasePlugin
     {
         if ((flags & (int)ChatFlags.Team) != 0 && sender.Team != CsTeam.Spectator)
         {
-            IEnumerable<CCSPlayerController> playerEntities = Utilities.GetPlayers().Where(player => player is
+            IEnumerable<CCSPlayerController> spectators = Utilities.GetPlayers().Where(player => player is
             {
                 IsValid: true,
                 IsBot: false,
                 Team: CsTeam.Spectator
             });
 
-            recipients.Concat(playerEntities);
+            recipients = [.. recipients, .. spectators];
 
             return HookResult.Handled;
         }
