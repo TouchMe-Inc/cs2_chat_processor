@@ -55,7 +55,8 @@ public class ChatLocalMute : BasePlugin
         IEnumerable<CCSPlayerController> playerEntities = Utilities.GetPlayers().Where(player => player is
         {
             IsBot: false,
-            IsValid: true
+            IsValid: true,
+            IsHLTV: false
         });
 
         bool has_mutes = _mutes.ContainsKey(player.SteamID);
