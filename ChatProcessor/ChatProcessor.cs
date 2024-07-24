@@ -7,6 +7,7 @@ using CounterStrikeSharp.API.Core.Translations;
 using ChatProcessor.API;
 using ChatProcessor.Utils;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace ChatProcessor;
 
@@ -19,31 +20,40 @@ public class ChatProcessor : BasePlugin
 
     private readonly PluginCapability<IChatProcessor> _pluginCapability = new("ChatProcessor");
 
-    private readonly List<string> _silentChatTriggers = CoreConfig.SilentChatTrigger.ToList();
-    private readonly List<string> _publicChatTriggers = CoreConfig.PublicChatTrigger.ToList();
-    private bool _hasSilentChatTrigger;
-    private bool _hasPublicChatTrigger;
-
     private ChatProcessorApi ChatProcessorApi = null!;
 
     internal static IStringLocalizer? Stringlocalizer;
 
     public override void Load(bool hotReload)
     {
+        if (!CoreConfig.SilentChatTrigger.Any())
+        {
+            SetFailState("CoreConfig.SilentChatTrigger is empty");
+            return;
+        }
+
+        if (!CoreConfig.PublicChatTrigger.Any())
+        {
+            SetFailState("CoreConfig.PublicChatTrigger is empty");
+            return;
+        }
+
         Stringlocalizer = Localizer;
 
         ChatProcessorApi = new ChatProcessorApi(this);
         Capabilities.RegisterPluginCapability(_pluginCapability, () => ChatProcessorApi);
 
-        AddCommandListener("say", OnPlayerChat);
-        AddCommandListener("say_team", OnPlayerChat);
-
-        _hasSilentChatTrigger = _silentChatTriggers.Count > 0;
-        _hasPublicChatTrigger = _publicChatTriggers.Count > 0;
+        AddCommandListener("say", OnPlayerChat, HookMode.Pre);
+        AddCommandListener("say_team", OnPlayerChat, HookMode.Pre);
     }
 
     private HookResult OnPlayerChat(CCSPlayerController? player, CommandInfo commandInfo)
     {
+        if (player == null || !player.IsValid)
+        {
+            return HookResult.Handled;
+        }
+
         string command = commandInfo.GetArg(0);
         string message = commandInfo.GetArg(1);
 
@@ -59,47 +69,21 @@ public class ChatProcessor : BasePlugin
             return HookResult.Handled;
         }
 
-        if (player == null || !player.IsValid)
+        if (CoreConfig.SilentChatTrigger.Any(trigger => message.StartsWith(trigger)))
         {
-            return HookResult.Handled;
+            return HookResult.Continue;
         }
 
-        if (_hasSilentChatTrigger)
+        foreach (var trigger in CoreConfig.PublicChatTrigger)
         {
-            foreach (var trigger in _silentChatTriggers)
+            if (message.StartsWith(trigger))
             {
-                if (message.StartsWith(trigger))
-                {
-                    return HookResult.Continue;
-                }
-            }
+                string fakeMessage = message.Replace(trigger, CoreConfig.SilentChatTrigger.First());
 
-            foreach (var trigger in _publicChatTriggers)
-            {
-                if (message.StartsWith(trigger))
-                {
-                    string fakeMessage = message.Replace(trigger, _silentChatTriggers.First());
+                // Hack. Required for hidden command execution (say /{cmd} OR say_team /{cmd}).
+                Server.NextFrame(() => Server.NextFrame(() => player.ExecuteClientCommandFromServer($"{command} \"{fakeMessage}\"")));
 
-                    // Hack. Required for hidden command execution (say /{cmd} OR say_team /{cmd}).
-                    Server.NextFrame(() => Server.NextFrame(() => player.ExecuteClientCommandFromServer($"{command} \"{fakeMessage}\"")));
-
-                    break;
-                }
-            }
-        }
-        else if (_hasPublicChatTrigger)
-        {
-            foreach (var trigger in _publicChatTriggers)
-            {
-                if (message.StartsWith(trigger))
-                {
-                    string fakeMessage = message.Replace(trigger, string.Empty);
-
-                    // Hack. Required for hidden command execution (console).
-                    Server.NextFrame(() => Server.NextFrame(() => player.ExecuteClientCommandFromServer($"css_{fakeMessage}")));
-
-                    break;
-                }
+                break;
             }
         }
 
@@ -229,7 +213,9 @@ public class ChatProcessor : BasePlugin
     public string Localize(CCSPlayerController player, string key)
     {
         if (player == null || player.IsValid == false)
+        {
             return string.Empty;
+        }
 
         using WithTemporaryCulture temporaryCulture = new WithTemporaryCulture(player.GetLanguage());
         return Localizer[key];
@@ -238,9 +224,17 @@ public class ChatProcessor : BasePlugin
     public string Localize(CCSPlayerController player, string key, params object[] args)
     {
         if (player == null || player.IsValid == false)
+        {
             return string.Empty;
+        }
 
         using WithTemporaryCulture temporaryCulture = new WithTemporaryCulture(player.GetLanguage());
         return Localizer[key, args];
+    }
+
+    public void SetFailState(string message)
+    {
+        Logger.LogCritical(message);
+        Server.ExecuteCommand($"css_plugins unload {Path.GetFileNameWithoutExtension(ModulePath)}");
     }
 }
