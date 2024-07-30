@@ -15,15 +15,20 @@ public class ChatSpecViewEx : BasePlugin
 
     private readonly PluginCapability<IChatProcessor> _pluginCapability = new("ChatProcessor");
 
-    private IChatProcessor? ChatProcessorApi;
+    private IChatProcessor? _api;
 
     public override void OnAllPluginsLoaded(bool hotReload)
     {
-        ChatProcessorApi = _pluginCapability.Get();
+        _api = _pluginCapability.Get();
 
-        if (ChatProcessorApi == null) return;
+        if (_api == null) return;
 
-        ChatProcessorApi.RegisterHandlerPre(OnChatMessagePre);
+        _api.RegisterHandlerPre(OnChatMessagePre);
+    }
+
+    public override void Unload(bool hotReload)
+    {
+        _api?.DeregisterHandlerPre(OnChatMessagePre);
     }
 
     private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref int flags)

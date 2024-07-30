@@ -20,7 +20,7 @@ public class ChatLocalMute : BasePlugin
 
     private Dictionary<ulong, List<ulong>> _mutes = [];
 
-    private IChatProcessor? ChatProcessorApi;
+    private IChatProcessor? _api;
 
     internal static IStringLocalizer? Stringlocalizer;
 
@@ -28,13 +28,18 @@ public class ChatLocalMute : BasePlugin
     {
         Stringlocalizer = Localizer;
 
-        ChatProcessorApi = _pluginCapability.Get();
+        _api = _pluginCapability.Get();
 
-        if (ChatProcessorApi == null) return;
+        if (_api == null) return;
 
         RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
 
-        ChatProcessorApi.RegisterHandlerPre(OnChatMessagePre);
+        _api.RegisterHandlerPre(OnChatMessagePre);
+    }
+
+    public override void Unload(bool hotReload)
+    {
+        _api?.DeregisterHandlerPre(OnChatMessagePre);
     }
 
     [ConsoleCommand("localmute", "Opens a menu with a list of players to block a player's chat.")]
