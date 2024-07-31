@@ -6,19 +6,21 @@ using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API;
 using Microsoft.Extensions.Localization;
+using CounterStrikeSharp.API.Core.Attributes;
 
 namespace ChatProcessor;
 
+[MinimumApiVersion(253)]
 public class ChatLocalMute : BasePlugin
 {
     public override string ModuleName => "ChatLocalMute";
-    public override string ModuleVersion => "1.0.0";
+    public override string ModuleVersion => "1.0.1";
     public override string ModuleAuthor => "TouchMe";
     public override string ModuleDescription => "Adds the ability to local mute for players!";
 
     private readonly PluginCapability<IChatProcessor> _pluginCapability = new("ChatProcessor");
 
-    private Dictionary<ulong, List<ulong>> _mutes = [];
+    private readonly Dictionary<ulong, List<ulong>> _mutes = [];
 
     private IChatProcessor? _api;
 
