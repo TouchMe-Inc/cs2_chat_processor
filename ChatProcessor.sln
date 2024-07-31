@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProcessorApi", "ChatPro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProcessorLocalMute", "ChatProcessorLocalMute\ChatProcessorLocalMute.csproj", "{A63081DD-1A85-4FB8-B8F7-44D054D01EF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatProcessorSpecViewEx", "ChatProcessorSpecViewEx\ChatProcessorSpecViewEx.csproj", "{DE8ECF8A-8577-4BB6-897E-BE5C25902CD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProcessorSpecViewEx", "ChatProcessorSpecViewEx\ChatProcessorSpecViewEx.csproj", "{DE8ECF8A-8577-4BB6-897E-BE5C25902CD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatProcessorTags", "ChatProcessorTags\ChatProcessorTags.csproj", "{1FD71781-BB96-48B5-8FB7-6C46E6586392}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DE8ECF8A-8577-4BB6-897E-BE5C25902CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE8ECF8A-8577-4BB6-897E-BE5C25902CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE8ECF8A-8577-4BB6-897E-BE5C25902CD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FD71781-BB96-48B5-8FB7-6C46E6586392}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FD71781-BB96-48B5-8FB7-6C46E6586392}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FD71781-BB96-48B5-8FB7-6C46E6586392}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FD71781-BB96-48B5-8FB7-6C46E6586392}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
