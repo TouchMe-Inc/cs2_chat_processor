@@ -8,9 +8,11 @@ using ChatProcessor.API;
 using ChatProcessor.Utils;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using CounterStrikeSharp.API.Core.Attributes;
 
 namespace ChatProcessor;
 
+[MinimumApiVersion(253)]
 public class ChatProcessor : BasePlugin
 {
     public override string ModuleName => "ChatProcessor";
@@ -28,14 +30,12 @@ public class ChatProcessor : BasePlugin
     {
         if (!CoreConfig.SilentChatTrigger.Any())
         {
-            SetFailState("CoreConfig.SilentChatTrigger is empty");
-            return;
+            throw new Exception("CoreConfig.SilentChatTrigger is empty");
         }
 
         if (!CoreConfig.PublicChatTrigger.Any())
         {
-            SetFailState("CoreConfig.PublicChatTrigger is empty");
-            return;
+            throw new Exception("CoreConfig.PublicChatTrigger is empty");
         }
 
         Stringlocalizer = Localizer;
@@ -230,11 +230,5 @@ public class ChatProcessor : BasePlugin
 
         using WithTemporaryCulture temporaryCulture = new WithTemporaryCulture(player.GetLanguage());
         return Localizer[key, args];
-    }
-
-    public void SetFailState(string message)
-    {
-        Logger.LogCritical(message);
-        Server.ExecuteCommand($"css_plugins unload {Path.GetFileNameWithoutExtension(ModulePath)}");
     }
 }
