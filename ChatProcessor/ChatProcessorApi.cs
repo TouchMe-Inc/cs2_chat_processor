@@ -7,8 +7,8 @@ public class ChatProcessorApi : IChatProcessor
 {
     private readonly ChatProcessor _chatProcessor;
 
-    private List<IChatProcessor.MessageCallbackPre> _messagePreHandlers = new();
-    private List<IChatProcessor.MessageCallbackPost> _messagePostHandlers = new();
+    private readonly List<IChatProcessor.MessageCallbackPre> _messagePreHandlers = [];
+    private readonly List<IChatProcessor.MessageCallbackPost> _messagePostHandlers = [];
 
     public ChatProcessorApi(ChatProcessor chatProcessor)
     {
