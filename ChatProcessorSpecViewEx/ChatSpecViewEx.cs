@@ -3,13 +3,15 @@ using CounterStrikeSharp.API.Core.Capabilities;
 using ChatProcessor.API;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Utils;
+using CounterStrikeSharp.API.Core.Attributes;
 
 namespace ChatProcessor;
 
+[MinimumApiVersion(253)]
 public class ChatSpecViewEx : BasePlugin
 {
     public override string ModuleName => "ChatSpecViewEx";
-    public override string ModuleVersion => "1.0.0";
+    public override string ModuleVersion => "1.0.1";
     public override string ModuleAuthor => "TouchMe";
     public override string ModuleDescription => "Allow spectators to read team messages";
 
