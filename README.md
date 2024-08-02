@@ -6,9 +6,8 @@ API for chat manipulation.
 
 
 This toolkit allows you to: 
-* locally mute the player ([Example](https://github.com/TouchMe-Inc/cs2_chat_processor/blob/main/ChatProcessorLocalMute/ChatLocalMute.cs));
+* locally mute the player (hide player messages. [Example](https://github.com/TouchMe-Inc/cs2_chat_processor/blob/main/ChatProcessorLocalMute/ChatLocalMute.cs));
 * display team chat for spectators ([Example](https://github.com/TouchMe-Inc/cs2_chat_processor/blob/main/ChatProcessorSpecViewEx/ChatSpecViewEx.cs));
-* hide or change player nickname/messages;
 * add a signature to the nickname (for example, admin/vip);
 
 ## Development
