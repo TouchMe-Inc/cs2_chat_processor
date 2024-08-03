@@ -35,7 +35,7 @@ public class ChatTags : BasePlugin
     }
     public void OnConfigParsed(TagsConfig config)
     {
-        if (config.Group.All(group => group.Key.StartsWith('#')))
+        if (!config.Group.All(group => group.Key.StartsWith('#')))
         {
             throw new Exception("Incorrect group format");
         }
