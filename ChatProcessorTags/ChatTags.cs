@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using ChatProcessor.API;
 using CounterStrikeSharp.API.Core.Capabilities;
 using CounterStrikeSharp.API.Modules.Admin;
+using ChatProcessorTags.Config;
 
 namespace ChatProcessor;
 

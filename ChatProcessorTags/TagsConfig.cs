@@ -1,4 +1,5 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using ChatProcessorTags.Config;
+using CounterStrikeSharp.API.Core;
 using System.Text.Json.Serialization;
 
 namespace ChatProcessor;
