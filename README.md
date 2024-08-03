@@ -11,10 +11,6 @@ This toolkit allows you to:
 * display team chat for spectators ([Example](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorSpecViewEx/));
 * add a signature to the nickname (admin/vip. [Example](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorTags/));
 
-## Screenshots
-
-![image](https://github.com/user-attachments/assets/446e5b70-0d09-49ae-9eef-3bcde6289ddd)
-
 ## Development
 
 First let's add a field:
