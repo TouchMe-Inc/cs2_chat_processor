@@ -7,7 +7,7 @@ using CounterStrikeSharp.API.Modules.Admin;
 namespace ChatProcessor;
 
 [MinimumApiVersion(253)]
-public class ChatTags : BasePlugin
+public class ChatTags : BasePlugin, IPluginConfig<TagsConfig>
 {
     public override string ModuleName => "ChatTags";
     public override string ModuleVersion => "1.0.0";
@@ -33,6 +33,7 @@ public class ChatTags : BasePlugin
     {
         _api?.DeregisterHandlerPre(OnChatMessagePre);
     }
+
     public void OnConfigParsed(TagsConfig config)
     {
         if (!config.Group.All(group => group.Key.StartsWith('#')))
