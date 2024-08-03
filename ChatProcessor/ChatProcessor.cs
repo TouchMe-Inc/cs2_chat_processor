@@ -62,7 +62,7 @@ public class ChatProcessor : BasePlugin
             return HookResult.Handled;
         }
 
-        message = Tags.RemoveColorTags(message);
+        message = ColorTags.Remove(message);
 
         if (string.IsNullOrEmpty(message))
         {
@@ -87,7 +87,7 @@ public class ChatProcessor : BasePlugin
             }
         }
 
-        string name = Tags.RemoveColorTags(player.PlayerName);
+        string name = ColorTags.Remove(player.PlayerName);
 
         int flags = (int)ChatFlags.None;
 
@@ -128,7 +128,7 @@ public class ChatProcessor : BasePlugin
 
         ChatProcessorApi.TriggerMessagePre(player, ref name, ref message, ref recipients, ref flags);
 
-        name = $"{Tags.teamColorTag}{name}";
+        name = $"{ColorTags.teamColorTag}{name}";
 
         Server.NextFrame(() => OnPlayerChatPost(player, name, message, recipients, flags));
 
@@ -203,8 +203,8 @@ public class ChatProcessor : BasePlugin
         {
             formatMessage = withPlace ? Localize(recipient, formatMessage, senderName, message, Localize(recipient, place)) : Localize(recipient, formatMessage, senderName, message);
 
-            recipient.PrintToChat(Tags.ReplaceColorTags(formatMessage, recipient.Team));
-            recipient.PrintToConsole(Tags.RemoveColorTags(formatMessage));
+            recipient.PrintToChat(ColorTags.Replace(formatMessage, recipient.Team));
+            recipient.PrintToConsole(ColorTags.Remove(formatMessage));
         }
 
         ChatProcessorApi.TriggerMessagePost(sender, senderName, message, recipients, flags);
