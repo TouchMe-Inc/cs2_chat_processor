@@ -2,7 +2,7 @@
 using CounterStrikeSharp.API.Core;
 using ChatProcessor.API;
 using CounterStrikeSharp.API.Core.Capabilities;
-using Microsoft.Extensions.Logging;
+using CounterStrikeSharp.API.Modules.Admin;
 
 namespace ChatProcessor;
 
@@ -12,7 +12,9 @@ public class ChatTags : BasePlugin
     public override string ModuleName => "ChatTags";
     public override string ModuleVersion => "1.0.0";
     public override string ModuleAuthor => "TouchMe";
-    public override string ModuleDescription => "...";
+    public override string ModuleDescription => "Adds the ability to add custom tags";
+
+    public TagsConfig Config { get; set; } = new TagsConfig();
 
     private readonly PluginCapability<IChatProcessor> _pluginCapability = new("ChatProcessor");
 
@@ -31,11 +33,32 @@ public class ChatTags : BasePlugin
     {
         _api?.DeregisterHandlerPre(OnChatMessagePre);
     }
+    public void OnConfigParsed(TagsConfig config)
+    {
+        if (config.Group.All(group => group.Key.StartsWith('#')))
+        {
+            throw new Exception("Incorrect group format");
+        }
+
+        if (!config.Permission.All(permission => permission.Key.StartsWith('@')))
+        {
+            throw new Exception("Incorrect permissions format");
+        }
+
+        Config = config;
+    }
 
     private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref int flags)
     {
-        // TODO
-        Logger.LogInformation($"Sender SteamId = {sender.SteamID}");
+        Tag tag;
+
+        if ((tag = Config.SteamID.FirstOrDefault(tag => tag.Key == sender.SteamID.ToString()).Value) != null ||
+            (tag = Config.Group.FirstOrDefault(tag => AdminManager.PlayerInGroup(sender, tag.Key)).Value) != null ||
+            (tag = Config.Permission.FirstOrDefault(tag => AdminManager.PlayerHasPermissions(sender, tag.Key)).Value) != null)
+        {
+            name = $"{tag.Template}{name}";
+            return HookResult.Handled;
+        }
 
         return HookResult.Continue;
     }
