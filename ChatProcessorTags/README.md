@@ -1,6 +1,6 @@
 # About ChatProcessorTags
 
-Adds tags to the server that can be assigned via permission/group or SteamID64.
+Adds chat tags that can be assigned via permission/group or SteamID64.
 
 ## Screenshots
 

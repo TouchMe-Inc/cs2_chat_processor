@@ -12,7 +12,7 @@ public class ChatTags : BasePlugin, IPluginConfig<TagsConfig>
     public override string ModuleName => "ChatTags";
     public override string ModuleVersion => "1.0.0";
     public override string ModuleAuthor => "TouchMe";
-    public override string ModuleDescription => "Adds the ability to add custom tags";
+    public override string ModuleDescription => "Adds chat tags that can be assigned via permission/group or SteamID64";
 
     public TagsConfig Config { get; set; } = new TagsConfig();
 
