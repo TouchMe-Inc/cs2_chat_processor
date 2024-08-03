@@ -2,6 +2,10 @@
 
 Adds tags to the server that can be assigned via permission/group or SteamID64.
 
+## Screenshots
+
+![image](https://github.com/user-attachments/assets/446e5b70-0d09-49ae-9eef-3bcde6289ddd)
+
 ## Configuration
 ```json
 {
