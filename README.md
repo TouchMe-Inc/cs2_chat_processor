@@ -54,3 +54,6 @@ private void OnChatMessagePost(CCSPlayerController sender, string name, string m
   // You code here
 }
 ```
+
+# Required
+[CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)
