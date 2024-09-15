@@ -169,6 +169,7 @@ public class ChatProcessor : BasePlugin
                         {
                             withPlace = true;
                             formatMessage = LangKey.CHAT_T;
+                            formatMessage = LangKey.CHAT_T_LOC;
                         }
                     }
                     break;
