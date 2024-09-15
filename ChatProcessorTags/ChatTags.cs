@@ -58,7 +58,7 @@ public class ChatTags : BasePlugin, IPluginConfig<TagsConfig>
             (tag = Config.Group.FirstOrDefault(tag => AdminManager.PlayerInGroup(sender, tag.Key)).Value) != null ||
             (tag = Config.Permission.FirstOrDefault(tag => AdminManager.PlayerHasPermissions(sender, tag.Key)).Value) != null)
         {
-            name = $"{tag.Template}{name}";
+            name = $"{tag.Template} {name}";
             return HookResult.Handled;
         }
 
