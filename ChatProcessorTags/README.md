@@ -3,25 +3,24 @@
 Adds chat tags that can be assigned via permission/group or SteamID64.
 
 ## Screenshots
-
-![image](https://github.com/user-attachments/assets/446e5b70-0d09-49ae-9eef-3bcde6289ddd)
+![image](https://github.com/user-attachments/assets/4cb64635-6bf4-41f8-930d-095f0e229812)
 
 ## Configuration
 ```json
 {
   "Tags.SteamID": {
-    "76561198409400523": {
-      "Template": "__Green__[VIP]__TeamColor__ "
+    "76561198409XXXXX": {
+      "Template": "{Green}[VIP]{TeamColor}"
     }
   },
   "Tags.Group": {
     "#css/admin": {
-      "Template": "__Green__[ADMIN]__TeamColor__ "
+      "Template": "{Green}[ADMIN]{TeamColor}"
     }
   },
   "Tags.Permission": {
     "@css/chat": {
-      "Template": "__Green__[CHATMASTER]__TeamColor__ "
+      "Template": "{Green}[CHATMASTER]{TeamColor}"
     }
   },
   "ConfigVersion": 1
