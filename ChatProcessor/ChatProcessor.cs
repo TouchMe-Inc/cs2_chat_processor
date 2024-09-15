@@ -15,7 +15,7 @@ namespace ChatProcessor;
 public class ChatProcessor : BasePlugin
 {
     public override string ModuleName => "ChatProcessor";
-    public override string ModuleVersion => "1.0.1";
+    public override string ModuleVersion => "1.1.0";
     public override string ModuleAuthor => "TouchMe";
     public override string ModuleDescription => "API for chat manipulation";
 
