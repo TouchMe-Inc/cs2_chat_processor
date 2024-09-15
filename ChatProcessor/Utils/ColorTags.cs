@@ -5,7 +5,7 @@ namespace ChatProcessor.Utils;
 
 public static class ColorTags
 {
-    public const string teamColorTag = "__TeamColor__";
+    public const string teamColorTag = "{TeamColor}";
 
     public static string Replace(string message, CsTeam team = CsTeam.None)
     {
@@ -23,7 +23,7 @@ public static class ColorTags
 
         foreach (var field in typeof(ChatColors).GetFields())
         {
-            string pattern = $"__{field.Name}__";
+            string pattern = $"{{{field.Name}}}";
             if (message.Contains(pattern, StringComparison.OrdinalIgnoreCase))
             {
                 message = message.Replace(pattern, field.GetValue(null)?.ToString() ?? string.Empty, StringComparison.OrdinalIgnoreCase);
@@ -42,7 +42,7 @@ public static class ColorTags
 
         foreach (FieldInfo field in typeof(ChatColors).GetFields())
         {
-            string pattern = $"__{field.Name}__";
+            string pattern = $"{{{field.Name}}}";
             if (message.Contains(pattern, StringComparison.OrdinalIgnoreCase))
             {
                 message = message.Replace(pattern, string.Empty, StringComparison.OrdinalIgnoreCase);
