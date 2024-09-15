@@ -7,7 +7,6 @@ using CounterStrikeSharp.API.Core.Translations;
 using ChatProcessor.API;
 using ChatProcessor.Utils;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using CounterStrikeSharp.API.Core.Attributes;
 
 namespace ChatProcessor;
@@ -201,34 +200,12 @@ public class ChatProcessor : BasePlugin
 
         foreach (CCSPlayerController recipient in recipients)
         {
-            formatMessage = withPlace ? Localize(recipient, formatMessage, senderName, message, Localize(recipient, place)) : Localize(recipient, formatMessage, senderName, message);
+            formatMessage = withPlace ? Localizer.ForPlayer(recipient, formatMessage, senderName, message, Localizer.ForPlayer(recipient, place)) : Localizer.ForPlayer(recipient, formatMessage, senderName, message);
 
             recipient.PrintToChat(ColorTags.Replace(formatMessage, recipient.Team));
             recipient.PrintToConsole(ColorTags.Remove(formatMessage));
         }
 
         ChatProcessorApi.TriggerMessagePost(sender, senderName, message, recipients, flags);
-    }
-
-    public string Localize(CCSPlayerController player, string key)
-    {
-        if (player == null || player.IsValid == false)
-        {
-            return string.Empty;
-        }
-
-        using WithTemporaryCulture temporaryCulture = new WithTemporaryCulture(player.GetLanguage());
-        return Localizer[key];
-    }
-
-    public string Localize(CCSPlayerController player, string key, params object[] args)
-    {
-        if (player == null || player.IsValid == false)
-        {
-            return string.Empty;
-        }
-
-        using WithTemporaryCulture temporaryCulture = new WithTemporaryCulture(player.GetLanguage());
-        return Localizer[key, args];
     }
 }
