@@ -6,10 +6,10 @@ API for chat manipulation.
 > The plugin hides original messages and reproduces them via player.PrintToChat, preserving the location tag (for team chat), and also sends a copy of the chat to the console
 
 
-This toolkit allows you to: 
-* locally mute the player (hide player messages. [Example](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorLocalMute/));
-* display team chat for spectators ([Example](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorSpecViewEx/));
-* add a signature to the nickname (admin/vip. [Example](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorTags/));
+Ready implementation: 
+* Locally gag the player (hide player messages. [Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorLocalMute/));
+* Display team chat for spectators ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorSpecViewEx/));
+* Add a signature to the nickname (admin/vip. [Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorTags/));
 
 ## Development
 
@@ -54,3 +54,6 @@ private void OnChatMessagePost(CCSPlayerController sender, string name, string m
   // You code here
 }
 ```
+
+# Required
+[CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)
