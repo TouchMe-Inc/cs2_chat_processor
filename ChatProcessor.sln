@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProcessor", "ChatProces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProcessorApi", "ChatProcessorApi\ChatProcessorApi.csproj", "{366EF4FA-E6DA-4003-AAF9-B5643619F4BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProcessorLocalMute", "ChatProcessorLocalMute\ChatProcessorLocalMute.csproj", "{A63081DD-1A85-4FB8-B8F7-44D054D01EF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProcessorLocalGag", "ChatProcessorLocalGag\ChatProcessorLocalGag.csproj", "{A63081DD-1A85-4FB8-B8F7-44D054D01EF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProcessorSpecViewEx", "ChatProcessorSpecViewEx\ChatProcessorSpecViewEx.csproj", "{DE8ECF8A-8577-4BB6-897E-BE5C25902CD7}"
 EndProject
