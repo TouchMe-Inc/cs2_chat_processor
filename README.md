@@ -7,7 +7,7 @@ API for chat manipulation.
 
 
 Ready implementation: 
-* Locally gag the player ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorLocalMute/));
+* Locally gag the player ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorLocalGag/));
 * Display team chat for spectators ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorSpecViewEx/));
 * Add a signature to the nickname ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorTags/));
 
