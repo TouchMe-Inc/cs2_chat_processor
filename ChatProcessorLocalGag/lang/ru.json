@@ -1,0 +1,7 @@
+﻿{
+  "menu.title": "Выберите игрока для локальной блокировки чата:",
+  "menu.item.player.unmuted": "{0}",
+  "menu.item.player.muted": "{0} [молчит]",
+  "message.unmuted": "Вы вновь видите сообщения {0}",
+  "message.muted": "Вы теперь не видите сообщения {0}"
+}

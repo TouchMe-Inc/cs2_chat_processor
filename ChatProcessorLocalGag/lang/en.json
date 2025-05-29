@@ -1,0 +1,7 @@
+{
+  "menu.title": "Select player for local chat block:",
+  "menu.item.player.unmuted": "{0}",
+  "menu.item.player.muted": "{0} [muted]",
+  "message.unmuted": "You are seeing {0} messages again",
+  "message.muted": "You no longer see {0} messages"
+}
