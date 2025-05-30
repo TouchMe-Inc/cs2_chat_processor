@@ -35,14 +35,14 @@ public class ChatProcessorApi : IChatProcessor
         _messagePostHandlers.Remove(handler);
     }
 
-    public void TriggerMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref int flags)
+    public void TriggerMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref ChatFlags flags)
     {
         foreach (var handler in _messagePreHandlers)
         {
-            string bameCopy = name;
-            string messageCopy = message;
-            List<CCSPlayerController> recipientsCopy = recipients;
-            int flagsCopy = flags;
+            var savedName = name;
+            var savedMessage = message;
+            var savedRecipients = new List<CCSPlayerController>(recipients);
+            var savedFlags = flags;
 
             HookResult hookResult = handler.Invoke(sender, ref name, ref message, ref recipients, ref flags);
 
@@ -52,14 +52,15 @@ public class ChatProcessorApi : IChatProcessor
             }
             else if (hookResult == HookResult.Continue)
             {
-                name = bameCopy;
-                message = messageCopy;
-                recipients = recipientsCopy;
-                flags = flagsCopy;
+                name = savedName;
+                message = savedMessage;
+                recipients = savedRecipients;
+                flags = savedFlags;
             }
         }
     }
-    public void TriggerMessagePost(CCSPlayerController sender, string name, string message, List<CCSPlayerController> recipients, int flags)
+
+    public void TriggerMessagePost(CCSPlayerController sender, string name, string message, List<CCSPlayerController> recipients, ChatFlags flags)
     {
         foreach (var handler in _messagePostHandlers)
         {

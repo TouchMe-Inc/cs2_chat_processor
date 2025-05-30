@@ -7,20 +7,21 @@ using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API;
 using Microsoft.Extensions.Localization;
 using CounterStrikeSharp.API.Core.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ChatProcessor;
 
-[MinimumApiVersion(285)]
+[MinimumApiVersion(318)]
 public class ChatLocalGag : BasePlugin
 {
     public override string ModuleName => "ChatLocalGag";
-    public override string ModuleVersion => "1.1.0";
+    public override string ModuleVersion => "1.1.1";
     public override string ModuleAuthor => "TouchMe";
     public override string ModuleDescription => "Adds the ability to local gag for players!";
 
     private readonly PluginCapability<IChatProcessor> _pluginCapability = new("ChatProcessor");
 
-    private readonly Dictionary<ulong, List<ulong>> _gags = [];
+    private readonly Dictionary<ulong, HashSet<ulong>> _gags = new();
 
     private IChatProcessor? _api;
 
@@ -90,9 +91,8 @@ public class ChatLocalGag : BasePlugin
         return HookResult.Continue;
     }
 
-    private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref int flags)
+    private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref ChatFlags flags)
     {
-
         if (_gags.ContainsKey(sender.SteamID))
         {
             RemoveMutedRecipients(sender, ref recipients);
@@ -105,19 +105,7 @@ public class ChatLocalGag : BasePlugin
 
     private void RemoveMutedRecipients(CCSPlayerController sender, ref List<CCSPlayerController> recipients)
     {
-        int recipient = 0;
-
-        while (recipient < recipients.Count)
-        {
-            if (IsRecipientMuted(recipients[recipient], sender.SteamID))
-            {
-                recipients.RemoveAt(recipient);
-            }
-            else
-            {
-                recipient++;
-            }
-        }
+        recipients.RemoveAll(recipient => IsRecipientMuted(recipient, sender.SteamID));
     }
 
     private string GetMenuItemText(CCSPlayerController player, CCSPlayerController playerEntity, bool hasMutes)
@@ -129,20 +117,21 @@ public class ChatLocalGag : BasePlugin
 
     private void ToggleMute(CCSPlayerController player, CCSPlayerController playerEntity, bool hasMutes)
     {
-        List<ulong> blockList = hasMutes ? _gags[player.SteamID] : new List<ulong>();
+        if (!_gags.TryGetValue(player.SteamID, out var blockList))
+        {
+            blockList = new HashSet<ulong>();
+            _gags[player.SteamID] = blockList;
+        }
 
-        if (blockList.Contains(playerEntity.SteamID))
+        if (!blockList.Add(playerEntity.SteamID))
         {
             blockList.Remove(playerEntity.SteamID);
             player.PrintToChat(Localizer["message.unmuted", playerEntity.PlayerName]);
         }
         else
         {
-            blockList.Add(playerEntity.SteamID);
             player.PrintToChat(Localizer["message.muted", playerEntity.PlayerName]);
         }
-
-        _gags[player.SteamID] = blockList;
     }
 
     private IEnumerable<CCSPlayerController> GetValidPlayers()
@@ -152,11 +141,11 @@ public class ChatLocalGag : BasePlugin
 
     private bool IsRecipientMuted(CCSPlayerController recipient, ulong senderSteamID)
     {
-        return _gags.TryGetValue(recipient.SteamID, out List<ulong>? mutedList) && mutedList.Contains(senderSteamID);
+        return _gags.TryGetValue(recipient.SteamID, out var mutedList) && mutedList.Contains(senderSteamID);
     }
 
-    private bool IsValidPlayer(CCSPlayerController? player)
+    private bool IsValidPlayer([NotNullWhen(true)] CCSPlayerController? player)
     {
-        return player != null && player.IsValid && !player.IsBot && !player.IsHLTV;
+        return player != null && player.IsValid && !player.IsBot;
     }
 }

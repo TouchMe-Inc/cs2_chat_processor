@@ -4,14 +4,15 @@ using ChatProcessor.API;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Utils;
 using CounterStrikeSharp.API.Core.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ChatProcessor;
 
-[MinimumApiVersion(285)]
+[MinimumApiVersion(318)]
 public class ChatSpecViewEx : BasePlugin
 {
     public override string ModuleName => "ChatSpecViewEx";
-    public override string ModuleVersion => "1.1.0";
+    public override string ModuleVersion => "1.1.1";
     public override string ModuleAuthor => "TouchMe";
     public override string ModuleDescription => "Allow spectators to read team messages";
 
@@ -34,27 +35,27 @@ public class ChatSpecViewEx : BasePlugin
     }
 
     private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message,
-                                        ref List<CCSPlayerController> recipients, ref int flags)
+                                        ref List<CCSPlayerController> recipients, ref ChatFlags flags)
     {
-        if (IsTeamChat(flags) && sender.Team != CsTeam.Spectator)
+        if (!flags.HasFlag(ChatFlags.Team) || sender.Team == CsTeam.Spectator)
         {
-            AddSpectatorsToRecipients(ref recipients);
-
-            return HookResult.Handled;
+            return HookResult.Continue;
         }
 
-        return HookResult.Continue;
-    }
+        AddSpectatorsToRecipients(ref recipients);
 
-    private bool IsTeamChat(int flags)
-    {
-        return (flags & (int)ChatFlags.Team) != 0;
+        return HookResult.Handled;
     }
 
     private void AddSpectatorsToRecipients(ref List<CCSPlayerController> recipients)
     {
         IEnumerable<CCSPlayerController> spectators = Utilities.GetPlayers()
-            .Where(player => player.IsValid && !player.IsBot && player.Team == CsTeam.Spectator);
+            .Where(player => IsValidPlayer(player) && player.Team == CsTeam.Spectator);
         recipients.AddRange(spectators);
+    }
+
+    private bool IsValidPlayer([NotNullWhen(true)] CCSPlayerController? player)
+    {
+        return player != null && player.IsValid && !player.IsBot;
     }
 }

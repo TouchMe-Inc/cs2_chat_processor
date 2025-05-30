@@ -8,10 +8,10 @@ namespace ChatProcessor.API;
 public interface IChatProcessor
 {
     delegate HookResult MessageCallbackPre(CCSPlayerController sender, ref string name, ref string message,
-        ref List<CCSPlayerController> recipients, ref int flags);
+        ref List<CCSPlayerController> recipients, ref ChatFlags flags);
 
     delegate void MessageCallbackPost(CCSPlayerController sender, string name, string message,
-                                      List<CCSPlayerController> recipients, int flags);
+                                      List<CCSPlayerController> recipients, ChatFlags flags);
 
     /// <summary>
     /// Registers a chat event handler.

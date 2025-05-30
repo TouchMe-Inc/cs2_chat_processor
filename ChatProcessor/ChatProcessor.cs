@@ -8,14 +8,15 @@ using ChatProcessor.API;
 using ChatProcessor.Utils;
 using Microsoft.Extensions.Localization;
 using CounterStrikeSharp.API.Core.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ChatProcessor;
 
-[MinimumApiVersion(285)]
+[MinimumApiVersion(318)]
 public class ChatProcessor : BasePlugin
 {
     public override string ModuleName => "ChatProcessor";
-    public override string ModuleVersion => "1.2.0";
+    public override string ModuleVersion => "1.1.1";
     public override string ModuleAuthor => "TouchMe";
     public override string ModuleDescription => "API for chat manipulation";
 
@@ -29,12 +30,12 @@ public class ChatProcessor : BasePlugin
     {
         if (!CoreConfig.SilentChatTrigger.Any())
         {
-            throw new Exception("CoreConfig.SilentChatTrigger is empty");
+            throw new ArgumentNullException(nameof(CoreConfig.SilentChatTrigger), "CoreConfig.SilentChatTrigger is empty");
         }
 
         if (!CoreConfig.PublicChatTrigger.Any())
         {
-            throw new Exception("CoreConfig.PublicChatTrigger is empty");
+            throw new ArgumentNullException(nameof(CoreConfig.PublicChatTrigger), "CoreConfig.PublicChatTrigger is empty");
         }
 
         Stringlocalizer = Localizer;
@@ -81,36 +82,34 @@ public class ChatProcessor : BasePlugin
             return HookResult.Continue;
         }
 
-        foreach (var trigger in CoreConfig.PublicChatTrigger)
+        string? trigger = CoreConfig.PublicChatTrigger.FirstOrDefault(message.StartsWith);
+        if (trigger != null)
         {
-            if (message.StartsWith(trigger))
-            {
-                string fakeMessage = message.Replace(trigger, CoreConfig.SilentChatTrigger.First());
-
-                // Hack. Required for hidden command execution (say /{cmd} OR say_team /{cmd}).
-                Server.NextFrame(() => player.ExecuteClientCommandFromServer($"{command} \"{fakeMessage}\""));
-
-                break;
-            }
+            string fakeMessage = message.Replace(trigger, CoreConfig.SilentChatTrigger.First());
+            // Hack. Required for hidden command execution (say /{cmd} OR say_team /{cmd}).
+            Server.NextFrame(() => player.ExecuteClientCommandFromServer($"{command} \"{fakeMessage}\""));
         }
 
         // Remove color tags from the player's name
         string name = ColorTags.Remove(player.PlayerName);
 
-        int flags = (int)ChatFlags.None;
+        ChatFlags flags = ChatFlags.None;
 
-        if (command.Contains("say_team"))
+        if (command.Equals("say_team"))
         {
-            flags |= (int)ChatFlags.Team;
+            flags |= ChatFlags.Team;
         }
 
         if (!player.PawnIsAlive)
         {
-            flags |= (int)ChatFlags.Dead;
+            flags |= ChatFlags.Dead;
         }
 
+        // Mark as say_team
+        bool isTeamChat = flags.HasFlag(ChatFlags.Team);
+
         // Get the list of recipients based on the team
-        List<CCSPlayerController> recipients = (flags & (int)ChatFlags.Team) != 0 ? GetRecipients(player.Team) : GetRecipients();
+        List<CCSPlayerController> recipients = GetRecipients(isTeamChat ? player.Team : CsTeam.None);
 
         // Trigger pre-message processing
         ChatProcessorApi.TriggerMessagePre(player, ref name, ref message, ref recipients, ref flags);
@@ -127,8 +126,7 @@ public class ChatProcessor : BasePlugin
         // Get the last known place name of the sender
         string place = player.PlayerPawn.Value?.LastPlaceName ?? string.Empty;
 
-        bool isTeamChat = (flags & (int)ChatFlags.Team) != 0;
-        bool isDead = (flags & (int)ChatFlags.Dead) != 0;
+        bool isDead = flags.HasFlag(ChatFlags.Dead);
         bool hasPlace = !string.IsNullOrEmpty(place) && isTeamChat && !isDead && IsPlayerTeam(player.Team);
 
         string formatMessage = GetFormatMessage(player.Team, isTeamChat, isDead, hasPlace);
@@ -136,10 +134,12 @@ public class ChatProcessor : BasePlugin
         // Send the formatted message to each recipient
         foreach (CCSPlayerController recipient in recipients)
         {
-            formatMessage = hasPlace ? Localizer.ForPlayer(recipient, formatMessage, senderName, message, Localizer.ForPlayer(recipient, place)) : Localizer.ForPlayer(recipient, formatMessage, senderName, message);
+            string finalMessage = hasPlace 
+                ? Localizer.ForPlayer(recipient, formatMessage, senderName, message, Localizer.ForPlayer(recipient, place)) 
+                : Localizer.ForPlayer(recipient, formatMessage, senderName, message);
 
-            recipient.PrintToChat(ColorTags.Replace(formatMessage, recipient.Team));
-            recipient.PrintToConsole(ColorTags.Remove(formatMessage));
+            recipient.PrintToChat(ColorTags.Replace(finalMessage, recipient.Team));
+            recipient.PrintToConsole(ColorTags.Remove(finalMessage));
         }
 
         // Trigger post-message processing
@@ -163,40 +163,13 @@ public class ChatProcessor : BasePlugin
             return team switch
             {
                 CsTeam.Spectator => LangKey.CHAT_SPEC,
-                CsTeam.Terrorist => GetTerroristMessage(isDead, hasPlace),
-                CsTeam.CounterTerrorist => GetCounterTerroristMessage(isDead, hasPlace),
+                CsTeam.Terrorist => isDead ? LangKey.CHAT_T_DEAD : (hasPlace ? LangKey.CHAT_T_LOC : LangKey.CHAT_T),
+                CsTeam.CounterTerrorist => isDead ? LangKey.CHAT_CT_DEAD : (hasPlace ? LangKey.CHAT_CT_LOC : LangKey.CHAT_CT),
                 _ => LangKey.CHAT_ALL
             };
         }
 
-        else if (IsPlayerTeam(team) && isDead)
-        {
-            return LangKey.CHAT_ALL_DEAD;
-        }
-
-        return LangKey.CHAT_ALL;
-    }
-
-    /// <summary>
-    /// Returns the appropriate chat message for terrorists based on their status.
-    /// </summary>
-    /// <param name="isDead">Indicates if the player is dead.</param>
-    /// <param name="hasPlace">Indicates if the player has a specific location.</param>
-    /// <returns>A string representing the chat message for terrorists.</returns>
-    private string GetTerroristMessage(bool isDead, bool hasPlace)
-    {
-        return isDead ? LangKey.CHAT_T_DEAD : (hasPlace ? LangKey.CHAT_T_LOC : LangKey.CHAT_T);
-    }
-
-    /// <summary>
-    /// Returns the appropriate chat message for counter-terrorists based on their status.
-    /// </summary>
-    /// <param name="isDead">Indicates if the player is dead.</param>
-    /// <param name="hasPlace">Indicates if the player has a specific location.</param>
-    /// <returns>A string representing the chat message for counter-terrorists.</returns>
-    private string GetCounterTerroristMessage(bool isDead, bool hasPlace)
-    {
-        return isDead ? LangKey.CHAT_CT_DEAD : (hasPlace ? LangKey.CHAT_CT_LOC : LangKey.CHAT_CT);
+        return (IsPlayerTeam(team) && isDead) ? LangKey.CHAT_ALL_DEAD : LangKey.CHAT_ALL;
     }
 
     /// <summary>
@@ -216,13 +189,13 @@ public class ChatProcessor : BasePlugin
     /// <returns>A list of CCSPlayerController representing the recipients.</returns>
     private List<CCSPlayerController> GetRecipients(CsTeam team = CsTeam.None)
     {
-        // Get all players who are valid and not bots
-        IEnumerable<CCSPlayerController> playerEntities = Utilities.GetPlayers()
-            .Where(p => p.IsValid && !p.IsBot);
+        return Utilities.GetPlayers()
+            .Where(player => IsValidPlayer(player) && (team == CsTeam.None || player.Team == team))
+            .ToList();
+    }
 
-        // Return players based on the team
-        return (team != CsTeam.None)
-            ? playerEntities.Where(p => p.Team == team).ToList()
-            : playerEntities.ToList();
+    private bool IsValidPlayer([NotNullWhen(true)] CCSPlayerController? player)
+    {
+        return player != null && player.IsValid && !player.IsBot;
     }
 }

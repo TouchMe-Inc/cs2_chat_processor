@@ -7,7 +7,7 @@ using ChatProcessorTags.Config;
 
 namespace ChatProcessor;
 
-[MinimumApiVersion(285)]
+[MinimumApiVersion(318)]
 public class ChatTags : BasePlugin, IPluginConfig<TagsConfig>
 {
     public override string ModuleName => "ChatTags";
@@ -50,7 +50,7 @@ public class ChatTags : BasePlugin, IPluginConfig<TagsConfig>
         Config = config;
     }
 
-    private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref int flags)
+    private HookResult OnChatMessagePre(CCSPlayerController sender, ref string name, ref string message, ref List<CCSPlayerController> recipients, ref ChatFlags flags)
     {
         Tag tag = GetTagForSender(sender);
 
