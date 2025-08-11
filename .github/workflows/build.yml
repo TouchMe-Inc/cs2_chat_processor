@@ -1,0 +1,43 @@
+name: Build Plugin
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ChatProcessor.sln
+
+      - name: Build
+        run: dotnet build ChatProcessor.sln --configuration Release --no-restore
+
+      - name: Collect build outputs
+        run: |
+          mkdir -p out
+          for dir in $(find src -type d -path "*/bin/Release/net8.0"); do
+            proj_name=$(basename "$(dirname "$(dirname "$(dirname "$dir")")")")
+            echo "Found build output: $dir"
+            echo "Project name: $proj_name"
+            mkdir -p "out/$proj_name"
+            cp -r "$dir"/. "out/$proj_name/"
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-build
+          path: out/
