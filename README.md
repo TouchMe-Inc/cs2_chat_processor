@@ -6,9 +6,9 @@ API for chat manipulation.
 > The plugin hides original messages and reproduces them via player.PrintToChat, preserving the location tag (for team chat), and also sends a copy of the chat to the console
 
 Ready implementation: 
-* Locally gag the player ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorLocalGag/));
-* Display team chat for spectators ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorSpecViewEx/));
-* Add a signature to the nickname ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/main/ChatProcessorTags/));
+* Locally gag the player ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/dev/src/Modules/ChatProcessor.LocalGag/));
+* Display team chat for spectators ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/dev/src/Modules/ChatProcessor.SpecViewEx/));
+* Add a signature to the nickname ([Here](https://github.com/TouchMe-Inc/cs2_chat_processor/tree/dev/src/Modules/ChatProcessor.Tags/));
 
 ## Development
 
